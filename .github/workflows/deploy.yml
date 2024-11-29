@@ -1,0 +1,40 @@
+name: CI/CD para Atualização de API Dog
+
+on:
+  push:
+    branches:
+      - main  # Ou a branch que você desejar
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Checkout do código
+      - name: Checkout do código
+        uses: actions/checkout@v3
+
+      # 2. Configurar Node.js
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      # 3. Instalar dependências
+      - name: Instalar dependências
+        run: npm install
+
+      # 4. Build do projeto
+      - name: Build do Projeto
+        run: npm run build
+
+      # 5. Gerar o arquivo Swagger
+      - name: Gerar arquivo Swagger
+        run: npm run start  # Isso irá gerar o swagger-spec.json
+
+      # 6. Enviar documentação para o API Dog
+      - name: Atualizar documentação no API Dog
+        env:
+          API_DOG_API_KEY: ${{ secrets.API_DOG_API_KEY }}
+          API_DOG_PROJECT_ID: ${{ secrets.API_DOG_PROJECT_ID }}
+        run: node upload-swagger.js

@@ -11,12 +11,11 @@ async function bootstrap() {
     .setTitle('Exemplo de API')
     .setDescription('API simples usando NestJS')
     .setVersion('1.0')
-    .addBearerAuth() // Adiciona suporte a autenticação (opcional)
+    .addBearerAuth()
     .build();
   const document = SwaggerModule.createDocument(app, config);
   writeFileSync('./swagger-spec.json', JSON.stringify(document, null, 2));
   SwaggerModule.setup('/api', app, document);
-  SwaggerModule.setup('api', app, document); // A documentação ficará disponível em /api
 
   await app.listen(3000);
   console.log('Aplicação rodando em: http://localhost:3000');

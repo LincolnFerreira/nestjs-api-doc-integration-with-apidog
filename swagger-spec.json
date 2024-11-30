@@ -1,18 +1,156 @@
 {
   "openapi": "3.0.0",
-  "info": {
-    "title": "Test API",
-    "version": "1.0.0"
-  },
   "paths": {
-    "/test": {
+    "/": {
       "get": {
-        "summary": "Test endpoint",
+        "operationId": "AppController_getHello",
+        "parameters": [],
         "responses": {
           "200": {
-            "description": "Success"
+            "description": ""
           }
-        }
+        },
+        "tags": [
+          "App"
+        ]
+      }
+    },
+    "/teste": {
+      "post": {
+        "operationId": "TesteController_create",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateTesteDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Teste"
+        ]
+      },
+      "get": {
+        "operationId": "TesteController_findAll",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Teste"
+        ]
+      }
+    },
+    "/teste/{id}": {
+      "get": {
+        "operationId": "TesteController_findOne",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Teste"
+        ]
+      },
+      "patch": {
+        "operationId": "TesteController_update",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateTesteDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Teste"
+        ]
+      },
+      "delete": {
+        "operationId": "TesteController_remove",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Teste"
+        ]
+      }
+    }
+  },
+  "info": {
+    "title": "API NestJS",
+    "description": "Documentação da API gerada automaticamente pelo Swagger",
+    "version": "1.0",
+    "contact": {}
+  },
+  "tags": [],
+  "servers": [],
+  "components": {
+    "securitySchemes": {
+      "bearer": {
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "type": "http"
+      }
+    },
+    "schemas": {
+      "CreateTesteDto": {
+        "type": "object",
+        "properties": {}
+      },
+      "UpdateTesteDto": {
+        "type": "object",
+        "properties": {}
       }
     }
   }

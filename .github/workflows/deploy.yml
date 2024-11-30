@@ -3,7 +3,7 @@ name: CI/CD para Atualização de API Dog
 on:
   push:
     branches:
-      - main  # Ou a branch que você desejar
+      - main  # Ou a branch que você deseja
 
 jobs:
   build:
@@ -30,9 +30,13 @@ jobs:
 
       # 5. Gerar o arquivo Swagger
       - name: Gerar arquivo Swagger
-        run: npm run swagger:generate  # Certifique-se de ter o script configurado no package.json
+        run: npm run swagger:generate  # Isso gera o swagger-spec.json
 
-    # 6. Enviar documentação para o API Dog
+      # 6. Verificar se o arquivo Swagger foi gerado
+      - name: Verificar arquivos no diretório
+        run: ls -la  # Listar os arquivos para garantir que swagger-spec.json está presente
+
+      # 7. Enviar documentação para o API Dog
       - name: Atualizar documentação no Apidog
         env:
           APIDOG_API_URL: ${{ secrets.APIDOG_API_URL }}
@@ -40,9 +44,14 @@ jobs:
           PROJECT_ID: ${{ secrets.PROJECT_ID }}
           API_VERSION: ${{ secrets.API_VERSION }}
         run: |
-          curl --request POST \
-            --url "$APIDOG_API_URL/v1/projects/$PROJECT_ID/import-openapi" \
-            --header "Authorization: Bearer $APIDOG_TOKEN" \
-            --header "X-Apidog-Api-Version: $API_VERSION" \
-            --header "Content-Type: application/json" \
-            --data @path/to/swagger-spec.json
+          # Verifique se o arquivo Swagger está presente
+          if [ -f swagger-spec.json ]; then
+            curl --request POST \
+              --url "$APIDOG_API_URL/v1/projects/$PROJECT_ID/import-openapi" \
+              --header "Authorization: Bearer $APIDOG_TOKEN" \
+              --header "X-Apidog-Api-Version: $API_VERSION" \
+              --header "Content-Type: application/json" \
+              --data @swagger-spec.json  # Certifique-se de que o arquivo está correto
+          else
+            echo "swagger-spec.json não encontrado!"; exit 1;
+          fi

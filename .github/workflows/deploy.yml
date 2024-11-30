@@ -30,11 +30,19 @@ jobs:
 
       # 5. Gerar o arquivo Swagger
       - name: Gerar arquivo Swagger
-        run: npm run start  # Isso irá gerar o swagger-spec.json
+        run: npm run swagger:generate  # Certifique-se de ter o script configurado no package.json
 
-      # 6. Enviar documentação para o API Dog
-      - name: Atualizar documentação no API Dog
+    # 6. Enviar documentação para o API Dog
+      - name: Atualizar documentação no Apidog
         env:
-          API_DOG_API_KEY: ${{ secrets.API_DOG_API_KEY }}
-          API_DOG_PROJECT_ID: ${{ secrets.API_DOG_PROJECT_ID }}
-        run: node upload-swagger.js
+          APIDOG_API_URL: ${{ secrets.APIDOG_API_URL }}
+          APIDOG_TOKEN: ${{ secrets.APIDOG_TOKEN }}
+          PROJECT_ID: ${{ secrets.PROJECT_ID }}
+          API_VERSION: ${{ secrets.API_VERSION }}
+        run: |
+          curl --request POST \
+            --url "$APIDOG_API_URL/v1/projects/$PROJECT_ID/import-openapi" \
+            --header "Authorization: Bearer $APIDOG_TOKEN" \
+            --header "X-Apidog-Api-Version: $API_VERSION" \
+            --header "Content-Type: application/json" \
+            --data @path/to/swagger-spec.json
